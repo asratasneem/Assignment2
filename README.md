@@ -36,9 +36,9 @@ SARS-CoV-2, the virus responsible for COVID-19, has significant effects on the h
 
 ---
 
-## Project Directory Structure
+## Directory Structure
 
-Organize the project files into a structured directory to simplify data management:
+Organize the files into a structured directory to simplify data management:
 ```bash
 mkdir -p /N/u/asrashai/Quartz/A2/{aligned_reads,counts,fastqc_reports,genome,hisat2_index,Raw_data,trimmed_reads}
 ```
