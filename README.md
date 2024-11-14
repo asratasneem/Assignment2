@@ -1,8 +1,8 @@
 # Assignment 2
 
-# README for Transcriptome Analysis of SARS-CoV-2 Infection in Human Respiratory Cells
+# Transcriptome Analysis of SARS-CoV-2 Infection in Human Respiratory Cells
 
-## Project Overview
+## Overview
 
 SARS-CoV-2, the virus responsible for COVID-19, has significant effects on the host transcriptome, particularly in respiratory cells. By comparing transcriptomic profiles between infected and non-infected samples at different time points, we can gain insights into the immune response and pathogenesis of the virus. This project focuses on analyzing miRNA expression levels in cultivated human respiratory cells exposed to SARS-CoV-2 versus mock-infected control cells, with samples collected at 24 and 72 hours post-infection.
 
