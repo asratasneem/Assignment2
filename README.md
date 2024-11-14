@@ -1,5 +1,4 @@
 # Assignment2
-Here's a README file incorporating the steps you've outlined in detail, suitable for your project:
 
 ---
 
