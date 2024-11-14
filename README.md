@@ -54,7 +54,7 @@ GENOME_DIR="/N/u/asrashai/Quartz/A2/genome"
 HISAT2_INDEX_DIR="/N/u/asrashai/Quartz/A2/hisat2_index"
 ```
 
----
+
 
 ## Data Download and Quality Control
 
@@ -63,12 +63,13 @@ HISAT2_INDEX_DIR="/N/u/asrashai/Quartz/A2/hisat2_index"
 3. **Aggregate QC Results with MultiQC**: Summarize FastQC reports for all samples in a single report using MultiQC for a comprehensive view.
 4. **Read Trimming**: Use Trim Galore to remove adapters and low-quality regions, ensuring high-quality reads for alignment.
 
-'''bash
+```bash
 trim_galore --quality 20 --length 30 -o $TRIM_DIR $DATA_DIR/*.fastq
-'''
+```
+
+
 These steps ensure that only high-quality reads proceed to alignment, which is crucial for accurate downstream analysis.
 
----
 
 ## Reference Genome Preparation
 
