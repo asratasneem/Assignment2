@@ -129,8 +129,8 @@ Gene Ontology (GO) enrichment analysis helps interpret DEGs by identifying enric
 3. *Visualization*: Generate bar plots to visualize the top enriched GO terms, providing insights into the biological functions associated with DEGs.
 
 Output:
-   - GO_enrichment_1.csv and GO_enrichment_2.csv for enriched terms
-   - GO_enrichment_plots.pdf for visualized GO results
+   - `GO_enrichment_1.csv` and `GO_enrichment_2.csv` for enriched terms
+   - `GO_enrichment_plots.pdf` for visualized GO results
 
 ---
 
