@@ -105,6 +105,86 @@ Differential expression analysis identifies genes whose expression levels vary s
 - **Load Data**: Read in `gene_counts.txt` and `assignment_2_info.csv` (metadata) files.
 - **DESeq2 Analysis**: Create a DESeq2 dataset and apply DESeq2 for differential expression analysis.
 - **Results Extraction and Filtering**: Extract significant DEGs based on adjusted p-values and log fold change thresholds.
+
+Here's the section formatted as a README entry, focusing on theoretical aspects and key code snippets where essential:
+
+---
+
+## Differential Expression Analysis with edgeR (Local RStudio Analysis)
+
+After transferring `gene_counts.txt` to the local system, differential expression analysis is performed in R using the **edgeR** package.
+
+### Theory and Steps
+
+1. **Loading Data**  
+   Load `gene_counts.txt` (gene counts matrix) and `assignment_2_info.csv` (metadata) files into R.
+
+   ```R
+   data <- read.table("gene_counts.txt", header = TRUE, row.names = 1)
+   sample_info <- read.csv("assignment_2_info.csv", row.names = 1)
+   ```
+
+2. **Group and Sample Preparation**  
+   Assign samples to experimental groups based on `Condition` (Mock or SARS-CoV-2) and `Time Point` (24H or 72H).
+
+   ```R
+   sample_groups <- factor(c(
+     rep("Mock_24H", 3), rep("SARS_24H", 3),  # Mock and SARS at 24 hours
+     rep("Mock_72H", 3), rep("SARS_72H", 3)   # Mock and SARS at 72 hours
+   ))
+   ```
+
+3. **Data Normalization**  
+   Normalize the data using edgeR’s `calcNormFactors` function, which adjusts for sequencing depth differences. This step ensures accurate comparisons between samples.
+
+   ```R
+   library(edgeR)
+   dge_obj <- DGEList(counts = data, group = sample_groups)
+   dge_obj <- calcNormFactors(dge_obj)
+   ```
+
+4. **Experimental Design and Model Fitting**  
+   - **Design Matrix**: Defines the experimental comparisons for differential analysis.
+   - **Model Fitting**: Fit a generalized linear model (GLM) to the normalized data using edgeR, which models variability in gene expression across groups.
+
+   ```R
+   design_matrix <- model.matrix(~0 + sample_groups)
+   colnames(design_matrix) <- levels(sample_groups)
+   dge_obj <- estimateDisp(dge_obj, design_matrix)
+   fit <- glmQLFit(dge_obj, design_matrix)
+   ```
+
+5. **Setting Contrasts and DEG Testing**  
+   Define contrasts to test specific comparisons:
+   - **Condition (SARS-CoV-2 vs. Mock)**: `(SARS_24H + SARS_72H)/2 - (Mock_24H + Mock_72H)/2`
+   - **Time Point (72H vs. 24H)**: `(Mock_24H + SARS_24H)/2 - (Mock_72H + SARS_72H)/2`
+
+   Use edgeR’s `glmQLFTest` function to identify DEGs, filtering by adjusted p-value and log fold change.
+
+   ```R
+   contrast1 <- makeContrasts(
+     (SARS_24H + SARS_72H)/2 - (Mock_24H + Mock_72H)/2, levels = design_matrix
+   )
+   contrast2 <- makeContrasts(
+     (Mock_24H + SARS_24H)/2 - (Mock_72H + SARS_72H)/2, levels = design_matrix
+   )
+
+   result1 <- glmQLFTest(fit, contrast = contrast1)
+   result2 <- glmQLFTest(fit, contrast = contrast2)
+
+   deg_SARS_vs_Mock <- topTags(result1, n = Inf)$table
+   deg_72H_vs_24H <- topTags(result2, n = Inf)$table
+
+   # Save results to CSV
+   write.csv(deg_SARS_vs_Mock, "DEG_SARS_vs_Mock.csv", row.names = TRUE)
+   write.csv(deg_72H_vs_24H, "DEG_72H_vs_24H.csv", row.names = TRUE)
+   ```
+
+   - **Output**: Differential expression results are saved as `DEG_SARS_vs_Mock.csv` and `DEG_72H_vs_24H.csv`, showing genes that are significantly differentially expressed between conditions and time points, respectively.
+
+
+
+
   
 Save the results:
    - `DESeq_results_72H_vs_24H.csv` and `DESeq_results_SARS_vs_Mock.csv`
@@ -129,7 +209,7 @@ Gene Ontology (GO) enrichment analysis helps interpret DEGs by identifying enric
 
 1. **Convert Gene IDs**: Map significant DEGs to Entrez IDs using ClusterProfiler’s `bitr` function.
 2. **Perform GO Enrichment Analysis**: Use the `enrichGO` function in ClusterProfiler to identify enriched GO terms for DEGs.
-3. **Visualization**: Generate bar plots to visualize the top enriched GO terms, providing insights into the biological functions associated with DEGs.
+3. **Visualization**: Generate bar plots to visualize the top  10 enriched GO terms, providing insights into the biological functions associated with DEGs.
 
 Output:
    - `GO_enrichment_1.csv` and `GO_enrichment_2.csv` for enriched terms
